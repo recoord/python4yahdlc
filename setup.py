@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-from setuptools import setup, Extension
-from os.path import dirname, abspath, join
+"""
+Setuptools build system configuration file
+for python4yahdlc.
+
+See https://setuptools.readthedocs.io.
+"""
+
 from codecs import open as fopen
+from os.path import dirname, abspath, join
+from setuptools import setup, Extension
 
 DIR = dirname(abspath(__file__))
 VERSION = '1.2.0'
 
 yahdlc = Extension(
     'yahdlc',
-    sources = [
+    sources=[
         DIR + '/src/python4yahdlc.c',
         DIR + '/lib/fcs16.c',
         DIR + '/lib/yahdlc.c'
     ],
-    include_dirs = [
+    include_dirs=[
         DIR + '/include/'
     ],
 )
@@ -23,17 +31,19 @@ with fopen(join(DIR, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name = 'python4yahdlc',
-    version = VERSION,
-    description = 'Python binding of the yahdlc library allowing to encode and decode HDLC frames',
-    long_description = long_description,
-    license = 'GPLv3',
-    keywords = 'hdlc yahdlc binding network',
-    author = 'Paul-Emmanuel Raoul',
-    author_email = 'skyper@skyplabs.net',
-    url = 'https://github.com/SkypLabs/python4yahdlc',
-    download_url = 'https://github.com/SkypLabs/python4yahdlc/archive/v{0}.zip'.format(VERSION),
-    classifiers = [
+    name='python4yahdlc',
+    version=VERSION,
+    description='Python binding of the yahdlc library allowing to encode \
+        and decode HDLC frames',
+    long_description=long_description,
+    license='GPLv3',
+    keywords='hdlc yahdlc binding network',
+    author='Paul-Emmanuel Raoul',
+    author_email='skyper@skyplabs.net',
+    url='https://github.com/SkypLabs/python4yahdlc',
+    download_url='https://github.com/SkypLabs/python4yahdlc/archive/v{0}.zip\
+        '.format(VERSION),
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries :: Python Modules',
@@ -47,7 +57,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     ],
-    ext_modules = [yahdlc],
-    test_suite = 'test',
+    ext_modules=[yahdlc],
+    test_suite='test',
     python_requires='>=3',
 )
