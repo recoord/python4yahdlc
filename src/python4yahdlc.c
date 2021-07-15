@@ -38,10 +38,11 @@ static PyObject *get_data(PyObject *self, PyObject *args)
     {
         PyObject *t;
 
-        t = PyTuple_New(3);
+        t = PyTuple_New(4);
         PyTuple_SetItem(t, 0, PyBytes_FromStringAndSize(recv_data, recv_length));
         PyTuple_SetItem(t, 1, PyLong_FromUnsignedLong(control.frame));
         PyTuple_SetItem(t, 2, PyLong_FromUnsignedLong(control.seq_no));
+        PyTuple_SetItem(t, 3, PyLong_FromUnsignedLong(rec));
 
         return t;
     }
