@@ -40,7 +40,7 @@ static PyObject *get_data(PyObject *self, PyObject *args)
         PyTuple_SetItem(t, 0, PyBytes_FromStringAndSize(recv_data, recv_length));
         PyTuple_SetItem(t, 1, PyLong_FromUnsignedLong(control.frame));
         PyTuple_SetItem(t, 2, PyLong_FromUnsignedLong(control.seq_no));
-        PyTuple_SetItem(t, 3, PyLong_FromUnsignedLong(ret));
+        PyTuple_SetItem(t, 3, PyLong_FromLong(ret));
         PyTuple_SetItem(t, 4, PyLong_FromUnsignedLong(recv_length));
 
         return t;
@@ -52,7 +52,7 @@ static PyObject *get_data(PyObject *self, PyObject *args)
         PyTuple_SetItem(t, 0, PyBytes_FromStringAndSize(recv_data, 0));
         PyTuple_SetItem(t, 1, PyLong_FromUnsignedLong(control.frame));
         PyTuple_SetItem(t, 2, PyLong_FromUnsignedLong(control.seq_no));
-        PyTuple_SetItem(t, 3, PyLong_FromUnsignedLong(ret));
+        PyTuple_SetItem(t, 3, PyLong_FromLong(ret));
         PyTuple_SetItem(t, 4, PyLong_FromUnsignedLong(recv_length));
 
         return t;
