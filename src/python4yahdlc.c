@@ -7,9 +7,6 @@
 
 #define TOTAL_FRAME_LENGTH      MAX_FRAME_PAYLOAD + HEADERS_LENGTH
 
-static PyObject *Yahdlc_MessageError;
-static PyObject *Yahdlc_FCSError;
-
 /* ---------- yahdlc functions ---------- */
 
 /**
@@ -39,35 +36,26 @@ static PyObject *get_data(PyObject *self, PyObject *args)
     {
         PyObject *t;
 
-        t = PyTuple_New(4);
+        t = PyTuple_New(5);
         PyTuple_SetItem(t, 0, PyBytes_FromStringAndSize(recv_data, recv_length));
         PyTuple_SetItem(t, 1, PyLong_FromUnsignedLong(control.frame));
         PyTuple_SetItem(t, 2, PyLong_FromUnsignedLong(control.seq_no));
         PyTuple_SetItem(t, 3, PyLong_FromUnsignedLong(ret));
+        PyTuple_SetItem(t, 4, PyLong_FromUnsignedLong(recv_length));
 
         return t;
     }
-    else if (ret == -EINVAL)
-    {
-        PyErr_SetString(PyExc_ValueError, "invalid parameter");
-        return NULL;
-    }
-    else if (ret == -ENOMSG)
-    {
-        PyErr_SetString(Yahdlc_MessageError, "invalid message");
-        return NULL;
-    }
-    // If the FCS is not valid, we return the sequence number
-    // to be sent back as NACK.
-    else if (ret == -EIO)
-    {
-        PyErr_SetObject(Yahdlc_FCSError, PyLong_FromUnsignedLong(control.seq_no));
-        return NULL;
-    }
-    else
-    {
-        PyErr_SetString(PyExc_RuntimeError, "unknown error");
-        return NULL;
+    else {
+        PyObject *t;
+
+        t = PyTuple_New(5);
+        PyTuple_SetItem(t, 0, PyBytes_FromStringAndSize(recv_data, 0));
+        PyTuple_SetItem(t, 1, PyLong_FromUnsignedLong(control.frame));
+        PyTuple_SetItem(t, 2, PyLong_FromUnsignedLong(control.seq_no));
+        PyTuple_SetItem(t, 3, PyLong_FromUnsignedLong(ret));
+        PyTuple_SetItem(t, 4, PyLong_FromUnsignedLong(recv_length));
+
+        return t;
     }
 }
 
@@ -162,13 +150,6 @@ PyMODINIT_FUNC PyInit_yahdlc(void)
     if (m == NULL)
         return NULL;
 
-    Yahdlc_MessageError = PyErr_NewException("yahdlc.MessageError", NULL, NULL);
-    Py_INCREF(Yahdlc_MessageError);
-    PyModule_AddObject(m, "MessageError", Yahdlc_MessageError);
-
-    Yahdlc_FCSError = PyErr_NewException("yahdlc.FCSError", NULL, NULL);
-    Py_INCREF(Yahdlc_FCSError);
-    PyModule_AddObject(m, "FCSError", Yahdlc_FCSError);
 
     PyModule_AddIntConstant(m, "FRAME_DATA", YAHDLC_FRAME_DATA);
     PyModule_AddIntConstant(m, "FRAME_ACK", YAHDLC_FRAME_ACK);
